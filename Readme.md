@@ -1,18 +1,21 @@
 
-# This repo contains a python version of the data_viz algorithm designed in my old paper: 
+# This repo contains a Python version of the data_viz algorithm designed in my old paper: 
 "Constraints on bosonic dark matter from ultralow-field nuclear magnetic resonance"
 published on Science Advances (DOI: 10.1126/sciadv.aax4539 ; https://www.science.org/doi/10.1126/sciadv.aax4539)
 
-Since most of the citations were related to this algo rather than the content of the paper itself I'm sharing it now.
+
+# What is this ?:
+The algorithm performs a cute visualisation trick to help you recover the phase of a signal of an unknown frequency. Once that phase is recovered, you can infer the signal frequency. This is especially usefull is you are looking for weak signal and want to test your null hypothesis.
+As I discovered later, it is essentially equivalent to entering a frame rotating at the signal frequency. If you are interested in knowning more have a look at the "rotating wave approximation" on wiki : https://en.wikipedia.org/wiki/Rotating-wave_approximation
+
+Since many people seemed more interested in the algorithm itself rather than the actual subject of the paper I'm putting a short description of the algorithm in this repo. Please note that the notebook provided is not optimized and is only here to help you implement the algo in your own experiment. If you wish to know more about it, have a look at the supplementary materials of the paper or contact me.
 
 # Context:
-We were facing a frequency modulated signal, containing a carrier frequency (which contained no information) and a slow external modulation of unknown frequency. The challenge was to figure out a way to average thousands of transient signals to increase the signal-to-noise ratio (SNR) of the modulation (appearing as sidebands in the spectra).
+We were facing a frequency modulated signal, containing a carrier frequency (which contained no information) and a slow external modulation of unknown frequency (which we were interested in detecting: if the modulation was present, it could have been dark matter). The challenge was to figure out a way to average thousands of transient signals to increase the signal-to-noise ratio (SNR) of the modulation (appearing as sidebands in the spectra).
 
 However, averaging in time domain or frequency domain simply averages down the sidebands, while increasing the SNR of the carrier. Which was exactly what we wanted to avoid.
 
-I figured out a way to do this averaging by basically using the famous rotating wave approximation, applied to a frequency-domain signal.
-
-In short the algorithm switches the frequency-domain frame into a new frame of reference.This enables canceling of the main carrier oscillation, while maintaining any modulation after averaging. This is basically a rotating frame approximation done on a coherent oscillating signal.
+In short the algorithm switches the frequency-domain frame into a new frame of reference. This enables canceling of the main carrier oscillation, while maintaining any modulation after averaging. As I figured out later, this is basically a rotating frame approximation done on a coherent oscillating signal.
 
 To do this, we perform post-processing phase-cycling to enhance the signal-to-noise ratio of our spectra. This technique involves incrementally shifting the phase of the spectra and averaging them together. By matching the phase shift to the phase accumulated by the oscillating field, we are able to coherently average the complex spectra and improve the SNR by a factor of N^1/2, where N is the number of transients. However, since the modulation frequency is unknown, we have to repeat this operation with many different phase increments.
 
